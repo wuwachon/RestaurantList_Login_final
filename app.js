@@ -4,6 +4,7 @@ const exphbs = require('express-handlebars')
 const mongoose = require('mongoose')
 const bodyParser = require('body-parser')
 const Restaurant = require('./models/restaurant.js')
+const restaurant = require('./models/restaurant.js')
 const app = express()
 // handlebars engine
 app.engine('hbs', exphbs({ defaultLayout: 'main', extname: '.hbs'}))
@@ -27,6 +28,21 @@ app.get('/', (req, res) => {
     .then(restaurant => res.render('index', { restaurant }))
     .catch(error => console.error(error))
 })
-
+// search function
+app.get('/search', (req, res) => {
+  const keyword = req.query.keyword
+  return Restaurant.find({ 
+    $or: [
+      {name: {$regex: keyword, $options: 'i'}},
+      {category: {$regex: keyword, $options: 'i'}}
+    ]
+  })
+    .lean()
+    .then(restaurant => {
+      if (!keyword || keyword.trim() === '') return res.redirect('/')
+      res.render('index', { restaurant, keyword })
+    })
+    .catch(error => console.log(error))
+})
 // port listen
 app.listen(3000, () => console.log('http://localhost:3000'))
