@@ -44,5 +44,23 @@ app.get('/search', (req, res) => {
     })
     .catch(error => console.log(error))
 })
+// create new restaurant
+app.get('/restaurants/new', (req, res) => {
+  res.render('new')
+})
+app.post('/restaurants', (req, res) => {
+  const restaurant = new Restaurant({
+    name: req.body.name,
+    category: req.body.category || 'none',
+    image: req.body.image || 'none',
+    location: req.body.location,
+    phone: req.body.phone || 'none',
+    rating: req.body.rating || 'none',
+    description: req.body.description
+  })
+  return restaurant.save()
+    .then(() => res.redirect('/'))
+    .catch(error => console.log(error))
+})
 // port listen
 app.listen(3000, () => console.log('http://localhost:3000'))
