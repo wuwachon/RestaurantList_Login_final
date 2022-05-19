@@ -13,6 +13,7 @@ _CRUD & MongoDB Practice_
 "bootstrap": "V5.1.3"
 "popper": "V2.9.1"
 "font awesome": V6.1.1"
+"dotenv": "V16.0.1"
 ```
 
 ## 安裝及執行
@@ -31,13 +32,10 @@ npm install
 ```
 
 - 本地 MongoDB 資料庫
-  連線並設定系統環境變數 **MONGODB_URI**
 
-```
-mongodb+srv://使用者名稱:使用者密碼@cluster0.9zo84.mongodb.net/資料庫名稱?retryWrites=true&w=majority
-```
+  1. 修改`.env.example`檔案內 MONGODB_URI 使用者名稱及密碼等參數並移除`.example`副檔名
 
-匯入 seeder 檔案
+  2. 匯入 seeder 檔案
 
 ```
 npm run seed
