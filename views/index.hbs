@@ -37,11 +37,11 @@
 
           </div>
         </div>
-        <div class="mb-3 d-flex justify-content-end align-items-center">
-          <a class="me-3" href="/restaurants/{{ this._id }}/edit">Edit</a>
-          <a class="me-3" href="/restaurants/{{ this._id }}">Detail</a>
+        <div class="mb-3 d-flex justify-content-end">
+          <a href="/restaurants/{{ this._id }}/edit" class="btn btn-sm btn-outline-primary me-3">Edit</a>
+          <a class="me-3 btn btn-sm btn-outline-info" href="/restaurants/{{ this._id }}">Detail</a>
           <form action="/restaurants/{{ this._id }}/delete" method="post" style="display: inline;">
-            <button type="submit">Delete</button>
+            <button type="submit" class="btn btn-sm btn-outline-danger">Delete</button>
           </form>
         </div>
       </a>
