@@ -62,5 +62,13 @@ app.post('/restaurants', (req, res) => {
     .then(() => res.redirect('/'))
     .catch(error => console.log(error))
 })
+// read the detail of restaurant
+app.get('/restaurants/:id', (req, res) => {
+  const id = req.params.id
+  return Restaurant.findById(id)
+    .lean()
+    .then(restaurant => res.render('detail', {restaurant}))
+    .catch(error => console.log(error))
+})
 // port listen
 app.listen(3000, () => console.log('http://localhost:3000'))
