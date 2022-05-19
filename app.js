@@ -70,5 +70,29 @@ app.get('/restaurants/:id', (req, res) => {
     .then(restaurant => res.render('detail', {restaurant}))
     .catch(error => console.log(error))
 })
+// update a restaurant information
+app.get('/restaurants/:id/edit', (req, res) => {
+  const id = req.params.id
+  return Restaurant.findById(id)
+    .lean()
+    .then(restaurant => res.render('edit', { restaurant }))
+    .catch(error => console.log(error))
+})
+app.post('/restaurants/:id/edit', (req, res) => {
+  const id = req.params.id
+  return Restaurant.findById(id)
+    .then(restaurant => {
+      restaurant.name = req.body.name
+      restaurant.category = req.body.category || 'none'
+      restaurant.image = req.body.image || 'none'
+      restaurant.location = req.body.location
+      restaurant.phone = req.body.phone || 'none'
+      restaurant.rating = req.body.rating || 'none'
+      restaurant.description = req.body.description
+      restaurant.save()
+    })
+    .then(() => res.redirect(`/restaurants/${id}`))
+    .catch(error => console.log(error))
+})
 // port listen
 app.listen(3000, () => console.log('http://localhost:3000'))
