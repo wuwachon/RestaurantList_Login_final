@@ -5,6 +5,8 @@ const mongoose = require('mongoose')
 const bodyParser = require('body-parser')
 const Restaurant = require('./models/restaurant.js')
 const restaurant = require('./models/restaurant.js')
+require('dotenv')
+
 const app = express()
 // handlebars engine
 app.engine('hbs', exphbs({ defaultLayout: 'main', extname: '.hbs'}))
@@ -56,7 +58,8 @@ app.post('/restaurants', (req, res) => {
     location: req.body.location,
     phone: req.body.phone || 'none',
     rating: req.body.rating || 'none',
-    description: req.body.description
+    description: req.body.description,
+    google_map: req.body.google_map
   })
   return restaurant.save()
     .then(() => res.redirect('/'))
@@ -89,6 +92,7 @@ app.post('/restaurants/:id/edit', (req, res) => {
       restaurant.phone = req.body.phone || 'none'
       restaurant.rating = req.body.rating || 'none'
       restaurant.description = req.body.description
+      restaurant.google_map = req.body.google_map
       restaurant.save()
     })
     .then(() => res.redirect(`/restaurants/${id}`))
