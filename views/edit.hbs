@@ -1,6 +1,6 @@
 <div class="container mt-4 d-flex flex-column align-items-center">
   <h2>Edit Restaurant Details</h2>
-  <form action="/restaurants/{{ restaurant._id }}/edit" method="post" class="row">
+  <form action="/restaurants/{{ restaurant._id }}?_method=PUT" method="post" class="row">
     <div class="col-6 mb-2">
       <label for="name" class="form-label">Name：</label>
       <input type="text" class="form-control" placeholder="restaurant name" name="name" id="name" required value="{{ restaurant.name }}">

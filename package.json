@@ -4,6 +4,7 @@
     "dotenv": "^16.0.1",
     "express": "^4.18.1",
     "express-handlebars": "^4.0.2",
+    "method-override": "^3.0.0",
     "mongoose": "^6.3.3"
   },
   "name": "2-3b_s3a7_restaurantlist_crud",

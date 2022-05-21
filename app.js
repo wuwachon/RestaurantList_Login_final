@@ -5,6 +5,7 @@ const mongoose = require('mongoose')
 const bodyParser = require('body-parser')
 const Restaurant = require('./models/restaurant.js')
 const restaurant = require('./models/restaurant.js')
+const methodOverride = require('method-override')
 require('dotenv').config()
 
 const app = express()
@@ -22,6 +23,8 @@ db.once('open', () => {
 app.use(bodyParser.urlencoded({extended: true}))
 // bootstrap and other stylesheets
 app.use(express.static('public'))
+// RESTful tool: method-override
+app.use(methodOverride('_method'))
 // routers
 // initial page render
 app.get('/', (req, res) => {
@@ -100,7 +103,7 @@ app.get('/restaurants/:id/edit', (req, res) => {
     .then(restaurant => res.render('edit', { restaurant }))
     .catch(error => console.log(error))
 })
-app.post('/restaurants/:id/edit', (req, res) => {
+app.put('/restaurants/:id', (req, res) => {
   const id = req.params.id
   return Restaurant.findById(id)
     .then(restaurant => {
@@ -118,7 +121,7 @@ app.post('/restaurants/:id/edit', (req, res) => {
     .catch(error => console.log(error))
 })
 // delete a restaurant
-app.post('/restaurants/:id/delete', (req, res) => {
+app.delete('/restaurants/:id', (req, res) => {
   const id = req.params.id
   return Restaurant.findById(id)
     .then(restaurant => restaurant.remove())
