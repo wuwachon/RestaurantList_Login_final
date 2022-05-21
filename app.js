@@ -5,7 +5,7 @@ const mongoose = require('mongoose')
 const bodyParser = require('body-parser')
 const Restaurant = require('./models/restaurant.js')
 const restaurant = require('./models/restaurant.js')
-require('dotenv')
+require('dotenv').config()
 
 const app = express()
 // handlebars engine
@@ -16,7 +16,7 @@ mongoose.connect(process.env.MONGODB_URI, {useNewUrlParser: true, useUnifiedTopo
 const db = mongoose.connection
 db.on('error', () => console.log('MongiDB connect error!'))
 db.once('open', () => {
-  console.log('MongoDB conncted!')
+  console.log('MongoDB connected!')
 })
 // body parser use
 app.use(bodyParser.urlencoded({extended: true}))
@@ -27,12 +27,14 @@ app.use(express.static('public'))
 app.get('/', (req, res) => {
   Restaurant.find()
     .lean()
-    .then(restaurant => res.render('index', { restaurant }))
+    .then(restaurant => {
+      res.render('index', { restaurant, sort: '選擇排序方式'})
+    })
     .catch(error => console.error(error))
 })
 // search function
-app.get('/search', (req, res) => {
-  const keyword = req.query.keyword
+app.get('/restaurants/search', (req, res) => {
+  const keyword = req.query.keyword || ''
   return Restaurant.find({ 
     $or: [
       {name: {$regex: keyword, $options: 'i'}},
@@ -42,7 +44,24 @@ app.get('/search', (req, res) => {
     .lean()
     .then(restaurant => {
       if (!keyword || keyword.trim() === '') return res.redirect('/')
-      res.render('index', { restaurant, keyword })
+      res.render('index', { restaurant , keyword, sort: '選擇排序方式' })
+    })
+    .catch(error => console.log(error))
+})
+// sort function
+app.post('/restaurants/sort', (req, res) => {
+  const sortKey = req.body.sort || 'name'
+  const sort = {
+    'name': 'A->Z',
+    '-name': 'Z->A',
+    'category': '類型',
+    'location': '地區'
+  }
+  return Restaurant.find()
+    .lean()
+    .sort(sortKey)
+    .then(restaurant => {
+      res.render('index', { restaurant , sort: sort[sortKey]})
     })
     .catch(error => console.log(error))
 })
