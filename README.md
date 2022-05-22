@@ -1,4 +1,4 @@
-# Restaurant List - v2
+# Restaurant List - v3
 
 _CRUD & MongoDB Practice_
 ![image](./localhost3000_screenshot.png)
@@ -14,6 +14,7 @@ _CRUD & MongoDB Practice_
 "popper": "V2.9.1"
 "font awesome": V6.1.1"
 "dotenv": "V16.0.1"
+"method-override": "^3.0.0"
 ```
 
 ## 安裝及執行
@@ -21,13 +22,13 @@ _CRUD & MongoDB Practice_
 - 下載至本地
 
 ```
-git clone https://github.com/wuwachon/RestaurantList_CRUD_v2
+git clone https://github.com/wuwachon/RestaurantList_Routes_v3
 ```
 
 - 安裝相關套件
 
 ```
-cd RestaurantList_CRUD_v2
+cd RestaurantList_Routes_v3
 npm install
 ```
 
@@ -53,11 +54,11 @@ Terminal 顯示 http://localhost:3000 即表示啟動完成，可至此網址網
 
 - 使用者可以瀏覽資料庫儲存的餐廳清單
 - 使用者可以以餐廳名稱或類別關鍵字搜尋特定餐廳
+- 使用者可依餐廳名稱、類別、地區排序瀏覽畫面
 - 使用者可以新增、瀏覽、修改、刪除一家餐廳
 
 ## 練習技巧
 
-- MongoDB 的種子資料設定
-- 練習 Express 與 mongoose 如何完成 CRUD 及 搜尋功能 的語法
-- 合理的 handlebars 檔案撰寫
-- git commit message 的粒度
+- 資料.sort()用法
+- 使用 method-override 修改 CRUD RESTful 動詞
+- Mongoose config & routes 練習
