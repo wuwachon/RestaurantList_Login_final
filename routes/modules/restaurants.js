@@ -4,16 +4,25 @@ const Restaurant = require('../../models/restaurant')
 
 // search function
 router.get('/search', (req, res) => {
-  const keyword = req.query.keyword || ''
+  const keyword = req.query.keyword.trim()
+  const keywords = keyword.split(',')
+  // const deals = keywords.map(name => {
+  //   return ({name: {$regex: name, $options: 'i'}})
+  // })
+  // deals.push(...(keywords.map(category => {
+  //   return ({category: {$regex: category, $options: 'i'}})
+  // })))
+  const regex = keywords.map(keyword => {
+    return new RegExp(keyword, 'i')
+  })
+  const deals = [{name: {$in: regex}}, {category: {$in: regex}}]
+
   return Restaurant.find({ 
-    $or: [
-      {name: {$regex: keyword, $options: 'i'}},
-      {category: {$regex: keyword, $options: 'i'}}
-    ]
+    $or: deals
   })
     .lean()
     .then(restaurant => {
-      if (!keyword || keyword.trim() === '') return res.redirect('/')
+      if (!keyword || keyword === '') return res.redirect('/')
       res.render('index', { restaurant , keyword, sort: '選擇排序方式' })
     })
     .catch(error => console.log(error))
