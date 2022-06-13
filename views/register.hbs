@@ -5,19 +5,19 @@
       <form action="/users/Register" method="POST" class="fs-4">
         <div class="mb-3">
           <label for="name" class="form-label">User Name：</label>
-          <input type="text" class="form-control" name="name" id="name" placeholder="your name">
+          <input type="text" class="form-control" name="name" id="name" placeholder="your name" value="{{name}}">
         </div>
         <div class="mb-3">
           <label for="email" class="form-label">User Email：</label>
-          <input type="text" class="form-control" name="email" id="email" placeholder="your email">
+          <input type="text" class="form-control" name="email" id="email" placeholder="your email" value="{{email}}">
         </div>
         <div class="mb-3">
           <label for="password" class="form-label">User Password：</label>
-          <input type="password" class="form-control" name="password" id="password" placeholder="your password">
+          <input type="password" class="form-control" name="password" id="password" placeholder="your password" value="{{password}}">
         </div>
         <div class="mb-3">
           <label for="confirmPassword" class="form-label">User Password：</label>
-          <input type="password" class="form-control" name="confirmPassword" id="confirmPassword" placeholder="confirm your password">
+          <input type="password" class="form-control" name="confirmPassword" id="confirmPassword" placeholder="confirm your password" value="{{confirmPassword}}">
         </div>
         <button type="submit" class="btn btn-primary col-12 mb-1">Register</button>
         <a href="/auth/facebook" class="btn btn-info col-12">Facebook Login</a>
