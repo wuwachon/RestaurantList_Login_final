@@ -1,6 +1,7 @@
 // modules required
 const express = require('express')
 const exphbs = require('express-handlebars')
+const session = require('express-session')
 const bodyParser = require('body-parser')
 const Restaurant = require('./models/restaurant.js')
 const methodOverride = require('method-override')
@@ -18,6 +19,12 @@ app.use(bodyParser.urlencoded({extended: true}))
 app.use(express.static('public'))
 // RESTful tool: method-override
 app.use(methodOverride('_method'))
+// session use
+app.use(session({
+  secret: process.env.SESSION_SECRET,
+  resave: false,
+  saveUninitialized: true
+}))
 // routers
 app.use(routes)
 
