@@ -8,7 +8,7 @@ module.exports = app => {
   // initialize passport
   app.use(passport.initialize())
   app.use(passport.session())
-  // Strategy
+  // Strategies
   passport.use(new LocalStrategy({ usernameField: 'email' }, (email, password, done) => {
     User.findOne({ email })
       .then(user => {
@@ -16,9 +16,30 @@ module.exports = app => {
         if (user.password !== password) return done(null, false, { message: 'Email or Password incorrect.'})
         return done(null, user)
       })
-      .catch(err => console.log(err))
+      .catch(err => done(err, false))
   }))
-  // Serilize and deserilize
+  passport.use(new FacebookStrategy({
+    clientID: process.env.FACEBOOK_ID,
+    clientSecret: process.env.FACEBOOK_SECRET,
+    callbackURL: process.env.FACEBOOK_CALLBACK,
+    profileFields: ['email', 'displayName']
+  }, (accessToken, refreshToken, profile, done) => {
+    const { name, email } = profile._json
+    User.findOne({ email })
+      .then(user => {
+        if (user) return done(null, user)
+        const randomPassword = Math.random().toString(36).slice(-8)
+        User.create({
+          name,
+          email,
+          password: randomPassword
+        })
+          .then(user => done(null, user))
+          .catch(err => done(err, false))
+      })
+      .catch(err => done(err, false))    
+  }));
+  // Serialize and deserialize
   passport.serializeUser((user, done) => {
     done(null, user.id)
   })

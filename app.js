@@ -5,11 +5,13 @@ const session = require('express-session')
 const bodyParser = require('body-parser')
 const Restaurant = require('./models/restaurant.js')
 const methodOverride = require('method-override')
+if (process.env.NODE_ENV !== 'production') require('dotenv').config()
 const routes = require('./routes/index')
 const usePassport = require('./config/passport')
 require('./config/mongoose')
 
 const app = express()
+const PORT = process.env.PORT
 // handlebars engine
 app.engine('hbs', exphbs({ defaultLayout: 'main', extname: '.hbs'}))
 app.set('view engine', 'hbs')
@@ -38,4 +40,4 @@ app.use((req, res, next) => {
 app.use(routes)
 
 // port listen
-app.listen(3000, () => console.log('http://localhost:3000'))
+app.listen(PORT, () => console.log(`http://localhost:${PORT}`))
