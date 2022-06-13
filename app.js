@@ -6,6 +6,7 @@ const bodyParser = require('body-parser')
 const Restaurant = require('./models/restaurant.js')
 const methodOverride = require('method-override')
 const routes = require('./routes/index')
+const usePassport = require('./config/passport')
 require('./config/mongoose')
 
 const app = express()
@@ -25,6 +26,14 @@ app.use(session({
   resave: false,
   saveUninitialized: true
 }))
+// passport use
+usePassport(app)
+// locals middleware
+app.use((req, res, next) => {
+  res.locals.isAuthenticated = req.isAuthenticated()
+  res.locals.user = req.user
+  next()
+})
 // routers
 app.use(routes)
 
