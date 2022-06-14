@@ -2,6 +2,7 @@ const { model } = require('mongoose')
 const passport = require('passport')
 const LocalStrategy = require('passport-local').Strategy
 const FacebookStrategy = require('passport-facebook').Strategy
+const GoogleStrategy = require('passport-google-oauth20').Strategy
 const User = require('../models/user')
 
 module.exports = app => {
@@ -22,6 +23,27 @@ module.exports = app => {
     clientID: process.env.FACEBOOK_ID,
     clientSecret: process.env.FACEBOOK_SECRET,
     callbackURL: process.env.FACEBOOK_CALLBACK,
+    profileFields: ['email', 'displayName']
+  }, (accessToken, refreshToken, profile, done) => {
+    const { name, email } = profile._json
+    User.findOne({ email })
+      .then(user => {
+        if (user) return done(null, user)
+        const randomPassword = Math.random().toString(36).slice(-8)
+        User.create({
+          name,
+          email,
+          password: randomPassword
+        })
+          .then(user => done(null, user))
+          .catch(err => done(err, false))
+      })
+      .catch(err => done(err, false))    
+  }));
+  passport.use(new GoogleStrategy({
+    clientID: process.env.GOOGLE_ID,
+    clientSecret: process.env.GOOGLE_SECRET,
+    callbackURL: process.env.GOOGLE_CALLBACK,
     profileFields: ['email', 'displayName']
   }, (accessToken, refreshToken, profile, done) => {
     const { name, email } = profile._json
