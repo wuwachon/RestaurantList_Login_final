@@ -17,6 +17,16 @@ router.get('/register', (req, res) => {
 router.post('/register', (req, res) => {
   // MongoDB create Data and redirect to '/'
   const { name, email, password, confirmPassword } = req.body
+  const errors = []
+  if (!name || !email || !password || !confirmPassword) errors.push({message: 'All form fields are required!'})
+  if (password !== confirmPassword) errors.push({message: 'Password and ConfirmPassword not match!'})
+  if (errors.length) return res.render('register', {
+    errors,
+    name,
+    email,
+    password,
+    confirmPassword
+  })
   User.findOne({ email })
     .then(user => {
       if (!user) return User.create({
@@ -26,8 +36,9 @@ router.post('/register', (req, res) => {
       })
         .then(() => res.redirect('/'))
         .catch(err => console.log(err))
-      console.log('User already exists')
+      errors.push({message: 'The email has been registered!'})
       res.render('register', {
+        errors,
         name,
         email,
         password,
@@ -39,6 +50,7 @@ router.post('/register', (req, res) => {
 router.get('/logout', (req, res) => {
   req.logout(err => {
     if (err) return next(err)
+    req.flash('success_msg', 'Logout successfully!')
     res.redirect('/users/login')
   })
 })

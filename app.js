@@ -3,6 +3,7 @@ const express = require('express')
 const exphbs = require('express-handlebars')
 const session = require('express-session')
 const bodyParser = require('body-parser')
+const flash = require('connect-flash')
 const Restaurant = require('./models/restaurant.js')
 const methodOverride = require('method-override')
 if (process.env.NODE_ENV !== 'production') require('dotenv').config()
@@ -30,10 +31,15 @@ app.use(session({
 }))
 // passport use
 usePassport(app)
+// flash use
+app.use(flash())
 // locals middleware
 app.use((req, res, next) => {
   res.locals.isAuthenticated = req.isAuthenticated()
   res.locals.user = req.user
+  res.locals.success_msg = req.flash('success_msg')
+  res.locals.warning_msg = req.flash('warning_msg')
+  res.locals.faillogin_msg = req.flash('faillogin_msg')
   next()
 })
 // routers
