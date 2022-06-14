@@ -1,3 +1,5 @@
+const bcrypt = require('bcryptjs')
+if (process.env.NODE_ENV !== 'production') require('dotenv').config()
 const Restaurant = require('../restaurant.js')
 const User = require('../user')
 const restaurantList = require('../../restaurants.json').results
@@ -8,7 +10,14 @@ db.once('open', () => {
   // assign restaurants to each user
   const resNum = 3
   userList.map((seedUser, userIndex) => {
-    User.create(seedUser)
+    bcrypt
+      .genSalt(10)
+      .then(salt => bcrypt.hash(seedUser.password.toString(), salt))
+      .then(hash => User.create({
+        name: seedUser.name,
+        email: seedUser.email,
+        password: hash
+      }))
       .then(user => {
         console.log(`${user.name} seed done!`)
         restaurantList.map((seedRest, resIndex) => {
@@ -19,7 +28,6 @@ db.once('open', () => {
           }
         })
       })
-      .catch(err => console.log(err))
   })
 })
 

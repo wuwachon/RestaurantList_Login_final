@@ -6,12 +6,6 @@ const Restaurant = require('../../models/restaurant')
 router.get('/search', (req, res) => {
   const keyword = req.query.keyword.trim()
   const keywords = keyword.split(',')
-  // const deals = keywords.map(name => {
-  //   return ({name: {$regex: name, $options: 'i'}})
-  // })
-  // deals.push(...(keywords.map(category => {
-  //   return ({category: {$regex: category, $options: 'i'}})
-  // })))
   const regex = keywords.map(keyword => {
     return new RegExp(keyword, 'i')
   })
@@ -50,6 +44,7 @@ router.get('/new', (req, res) => {
 })
 router.post('/', (req, res) => {
   const restaurant = req.body
+  restaurant.userId = req.user._id
   return Restaurant.create(restaurant)
     .then(() => res.redirect('/'))
     .catch(error => console.log(error))
